@@ -1,0 +1,27 @@
+name: SLT
+channels:
+  - http://conda.anaconda.org/gurobi
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - certifi=2019.11.28=py27h8c360ce_1
+  - kma=1.3.28=h188c3c3_0
+  - libzlib=1.2.11=h9173be1_1013
+  - ncurses=5.9=10
+  - pip=20.1.1=pyh9f0ad1d_0
+  - python=2.7.5=3
+  - python_abi=2.7=1_cp27m
+  - readline=6.2=0
+  - setuptools=44.0.0=py27_0
+  - sqlite=3.19.3=1
+  - tk=8.5.19=2
+  - wheel=0.37.1=pyhd8ed1ab_0
+  - zlib=1.2.11=h9173be1_1013
+  - pip:
+    - numpy==1.16.6
+    - pandas==0.24.2
+    - python-dateutil==2.8.2
+    - pytz==2021.3
+    - six==1.16.0
+
