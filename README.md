@@ -14,9 +14,9 @@ SALTy typing is highly accurate and can quickly analyse large volumes of <i>S. a
 # Installation 
 ## Option 1: Clone repository from gitHub
 ````
-git clone https://github.com/LanLab/SaLTy.git
+git clone https://github.com/LanLab/salty.git
 
-cd SaLTy
+cd salty
 
 python setup.py install
 ````

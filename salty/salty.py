@@ -212,7 +212,7 @@ def main():
         exit()
 
     elif args.version:
-        print(f"SalTy version: {version}")
+        print(f"salty version: {version}")
         sys.exit(0)
 
     elif args.report:

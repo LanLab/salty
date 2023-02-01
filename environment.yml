@@ -4,7 +4,7 @@ package:
 
 source:
   git_rev: "1.0.0"
-  git_url: https://github.com/LanLab/SaLTy.git
+  git_url: https://github.com/LanLab/salty.git
 
 requirements:
   build:
@@ -19,4 +19,4 @@ test:
     -
 
 about:
-  home: https://github.com/LanLab/SaLTy
+  home: https://github.com/LanLab/salty

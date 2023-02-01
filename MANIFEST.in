@@ -1,2 +1,2 @@
 global-include salty/*
-graft SaLTy/resources
+graft salty/resources
