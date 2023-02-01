@@ -7,45 +7,32 @@ import pandas as pd
 from time import sleep as sl
 import collections
 import multiprocessing
-
-#testing
 import time
-
-def timer(genome, start_time_ongoing, start_time_analysis):
-    # Total time elapsed
-    # since the timer started
-    totaltime = round((time.time() - start_time_ongoing), 4)
-    isolateTime = round((time.time() - start_time_analysis), 4)
-
-    # Printing the lap number,
-    # lap-time and total time
-    print('TESTINGLINE',totaltime, isolateTime, genome)
+import textwrap
 
 #caller
-def caller(genome, args, start_time_ongoing):
+def caller(path, args, start_time_ongoing):
     start_time_analysis = time.time() ##FIX
-
-    args.input_genome = genome
     alleles = {'Lineage':'-','SACOL1908': '-', 'SACOL0451': '-', 'SACOL2725': '-'}
-    parseInput(args) #alter DB path option
+    parseInput(path, args) #alter DB path option
     alleles = filtCalledAlleles(alleles, args)
     alleles = getLineageFromAllele(alleles, args)
     generateReport(alleles, args)
-    timer(genome, start_time_ongoing, start_time_analysis)
-def parseInput(args):
-    if args.input_genome:
-        os.environ['accession'] = getAccession(args.input_genome)
+    timer(os.environ['accession'], start_time_ongoing, start_time_analysis)
+def parseInput(path, args):
+    if path[0] == 'assembly':
+        os.environ['accession'] = getAccession(path[1])
         mkdirOutput(args)
         outPath = args.output_folder + '/' + os.environ['accession'] + '/kma_' + os.environ['accession']
-        p = subprocess.Popen(['kma','-i', args.input_genome, '-t_db', args.kma_index, '-o', outPath, '-t', '1'])
+        p = subprocess.Popen(['kma','-i', path[1], '-t_db', args.kma_index, '-o', outPath, '-t', '1'])
         (output, err) = p.communicate()
         p_status = p.wait()
 
-    elif args.reads_folder:
-        os.environ['accession'] = getAccession(args.reads_folder.split(',')[0])
+    elif path[0] == 'pairedEndReadForward':
+        os.environ['accession'] = getAccession(path[1])
         mkdirOutput(args)
         outPath = args.output_folder + '/' + os.environ['accession'] + '/kma_' + os.environ['accession']
-        inputSTR = f"""kma -ipe {args.reads_folder}/*.fastq.gz -t_db {args.kma_index} -o {outPath} -t 1"""
+        inputSTR = f"""kma -ipe {path[1].replace('_1.','_*.')} -t_db {args.kma_index} -o {outPath} -t 1"""
         p = subprocess.Popen(inputSTR, shell=True)
         (output, err) = p.communicate()
         p_status = p.wait()
@@ -124,12 +111,21 @@ def generateSummary(args):
         for line in saveList:
             out.write(line + '\n')
 def getOutMeta(args):
-    if args.format_csv:
+    if args.csv_format:
         outMeta = ('csv', ',')
         return outMeta
     else:
         outMeta = ('txt', '\t')
         return outMeta
+def timer(genome, start_time_ongoing, start_time_analysis):
+    # Total time elapsed
+    # since the timer started
+    totaltime = round((time.time() - start_time_ongoing), 4)
+    isolateTime = round((time.time() - start_time_analysis), 4)
+
+    # # Printing the lap number,
+    # # lap-time and total time
+    # print('TESTINGLINE',totaltime, isolateTime, genome)
 
 #I/O
 def argsParser():
@@ -139,27 +135,20 @@ def argsParser():
     general.add_argument('-t','--threads', default=1, type=int, help='Number of threads (speeds up parsing raw reads).')
     general.add_argument('-f','--force', default=False, action='store_true',  help='Overwite existing output folder.')
     general.add_argument('--report', default=False, action='store_true',  help='Only generate summary report from previous SALTy outputs.')
-
+    general.add_argument('-v','--version', default=True, action='store_true')
 
     inputs = parser.add_argument_group('INPUT')
-    # input = inputs.add_mutually_exclusive_group(required=True)
-    input = inputs.add_mutually_exclusive_group()
-
-    input.add_argument('-i','--genome_folder', help='Input folder with assembled DNA sequence file.')
-    input.add_argument('-r','--reads_folder', help='Folder with forward and reverse raw reads (fastq.gz)')
+    inputs.add_argument('-i','--input_folder', help='Folder of genomes (*.fasta or *.fna) and/or pair end reads (each accession must have *_1.fastq.qz and *_2.fastq.')
 
     output = parser.add_argument_group('OUTPUT')
     output.add_argument('-o','--output_folder', help='Output Folder to save result.', default='stdout')
-    output.add_argument('-csv','--format_csv', action='store_true', help='Output file in csv format.')
+    output.add_argument('-c','--csv_format', action='store_true', help='Output file in csv format.')
     output.add_argument('-s','--summary', action='store_true', help='Concatenate all output assignments into single file.')
 
     paths = parser.add_argument_group('DB PATHS')
-    base = os.path.dirname(os.path.realpath(__file__))
-    paths.add_argument('-l','--lineages', default=base + '/alleles/alleles.csv', help='Path to specific alleles for each lineage.')
-    paths.add_argument('-k','--kma_index', default=base + '/kmaIndex/kmaIndex', help='Path to indexed KMA database.')
-
-    # gitHub = parser.add_argument_group('PUBLIC ACCESS')
-    # gitHub.add_argument('FIX ADD LANLAB LINK')
+    base = os.path.join(os.path.dirname(os.path.realpath(__file__)))
+    paths.add_argument('-l','--lineages', default=base + '/resources/alleles/alleles.csv', help='Path to specific alleles for each lineage.')
+    paths.add_argument('-k','--kma_index', default=base + '/resources/kmaIndex/kmaIndex', help='Path to indexed KMA database.')
 
     return(parser.parse_args())
 def mkdirOutput(args):
@@ -193,69 +182,52 @@ def checkInputDatabases(args):
     else:
         return False
 def collectGenomes(args):
-    outList = []
-    for type in ('*.fasta','*.fna'):
-        outList.extend(glob.iglob(join(args.genome_folder + '/', type)))
-    return outList
-def collectRawReads(args):
-    outList = []
-    for forwardRead in glob.iglob(args.reads_folder + '/*_1.fastq*'):
-        # genome = filename.split('/')[-1].split('_')[0]
-        # if os.path.isfile(args.reads_folder + '/' + genome + '_2.fastq*'):
-        reverseRead = forwardRead.replace('_1.','_2')
-        paths = forwardRead + ',' + reverseRead
-        outList.append(paths)
-    return outList
+    paths = []
+    for fasta in glob.iglob(args.input_folder + '/*fasta'):
+        paths.append(['assembly',fasta])
+    for fna in glob.iglob(args.input_folder + '/*fna'):
+        paths.append(['assembly',fna])
+    for forwardRead in glob.iglob(args.input_folder + '/*_1.fastq.gz'):
+        accesion = forwardRead.split('/')[-1].replace('_1.fastq.gz','')
+        reverseRead = f"{args.input_folder}/{accesion}_2.fastq.gz"
+        if os.path.isfile(reverseRead):
+            paths.append(['pairedEndReadForward', forwardRead])
+        else:
+            print(f"Failed to find paired end reads for {accesion}")
+    return paths
 
 def run_multiprocessing(func, i, n_processors):
     with multiprocessing.Pool(processes=n_processors) as pool:
         return pool.starmap(func, i)
 
 #main
-def SALTy():
-    import time ##FIX
+def main():
+
     args = argsParser()
+    version = "1.1.0"
     start_time_ongoing = time.time()
 
     if not checkInputDatabases(args):
         print('Input KMA Index and Predefined Lineages do not contain same genes. Rebuild either.')
         exit()
 
-    if args.report:
+    elif args.version:
+        print(f"SalTy version: {version}")
+        sys.exit(0)
+
+    elif args.report:
         generateSummary(args)
 
+    elif args.input_folder:
+        inputPaths = collectGenomes(args)
+        if (len(inputPaths) > 0):
+            inps = [(path, args, start_time_ongoing) for path in inputPaths]
+            run_multiprocessing(caller, inps, args.threads)
+            generateSummary(args)
+
     else:
-        if args.genome_folder:
-            inputGenomePath = collectGenomes(args)
-            if len(inputGenomePath) > 0:
-                inps = [(x, args, start_time_ongoing) for x in inputGenomePath]
-                run_multiprocessing(caller, inps, args.threads)
-                generateSummary(args)
-
-            else:
-                print("Input folder doees not have assemblies with extension '.fna' or '.fasta'")
-                exit()
-
-        elif args.reads_folder: #only configured for paired ends raw reads
-            inputRawReads = collectRawReads(args)
-            if len(inputRawReads) > 0:
-                inps = [(x, args) for x in inputRawReads]
-                run_multiprocessing(caller, inps, args.threads)
-                generateSummary(args)
-            else:
-                print('Input folder does not contain pair end raw reads.')
-                exit()
+        print("Input folder doees not have assemblies and/or paired end reads.")
+        exit()
 
 if __name__ == '__main__':
-    SALTy()
-
-##TODO add in dependency checker
-#Install Dependencies
-#python3
-#kma
-#pandas
-#np
-#mlst
-#sqlite
-#glob
-
+    main()
