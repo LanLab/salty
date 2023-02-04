@@ -23,7 +23,7 @@ python setup.py install
 Make sure that you have the dependencies installed.
 
 ## Option 2: Conda installation
-`conda install -c bioconda -c conda-forge salty`
+`conda install -c conda-forge -c bioconda salty`
 
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/salty/badges/installer/conda.svg)](https://conda.anaconda.org/bioconda)
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/salty/badges/downloads.svg)](https://anaconda.org/bioconda/salty)
