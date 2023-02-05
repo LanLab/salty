@@ -18,7 +18,7 @@ git clone https://github.com/LanLab/salty.git
 
 cd salty
 
-python setup.py install
+pip install .
 ````
 Make sure that you have the dependencies installed.
 
