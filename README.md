@@ -11,19 +11,10 @@ SALTy typing is highly accurate and can quickly analyse large volumes of <i>S. a
 
 ---
 
-# Installation 
-## Option 1: Clone repository from gitHub
-````
-git clone https://github.com/LanLab/salty.git
-
-cd salty
-
-pip install .
-````
-Make sure that you have the dependencies installed.
-
-## Option 2: Conda installation
-`conda install -c conda-forge -c bioconda salty`
+# Installation
+```commandline
+conda install -c conda-forge -c bioconda salty`
+```
 
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/salty/badges/installer/conda.svg)](https://conda.anaconda.org/bioconda)
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/salty/badges/downloads.svg)](https://anaconda.org/bioconda/salty)
@@ -64,11 +55,11 @@ DB PATHS:
 Run SaLTy on a folder containing pairs of fastq files and/or assemblies.
 
 ```commandline
-python salty.py --input_folder /input/reads/folder/ --output_folder /output/folder/name/ --threads INT
+salty --input_folder /input/reads/folder/ --output_folder /output/folder/name/ --threads INT
 ```
 Specify SaLTy output assigned lineages in comma-separated (.csv) format. 
 ```commandline
-python salty.py --input_folder /input/reads/folder/ --output_folder /output/folder/name/ --csv_format
+salty --input_folder /input/reads/folder/ --output_folder /output/folder/name/ --csv_format
 ```
 
 # Example Output
@@ -87,3 +78,4 @@ SRR10591328	15		24		20		69
 |SACOL0451|The identified allele for the SACOL0451 locus.|
 |SACOL1908|The identified allele for the SACOL1908 locus.|
 |SACOL2725|The identified allele for the SACOL2725 locus.|
+
