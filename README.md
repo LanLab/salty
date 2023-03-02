@@ -33,6 +33,9 @@ GENERAL:
   -f, --force           Overwite existing output folder.
   --report              Only generate summary report from previous SALTy
                         outputs.
+  --check               Checks that required dependencies are available.
+  -v, --version         Returns current SaLTy version.
+
 
 INPUT:
   -i INPUT_FOLDER, --input_folder INPUT_FOLDER
