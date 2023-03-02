@@ -137,6 +137,7 @@ def argsParser():
     general.add_argument('-f','--force', default=False, action='store_true',  help='Overwite existing output folder.')
     general.add_argument('--report', default=False, action='store_true',  help='Only generate summary report from previous SALTy outputs.')
     general.add_argument('-v','--version', default=True, action='store_true')
+    general.add_argument("--check", action='store_true', help="check dependencies are installed")
 
     inputs = parser.add_argument_group('INPUT')
     inputs.add_argument('-i','--input_folder', help='Folder of genomes (*.fasta or *.fna) and/or pair end reads (each accession must have *_1.fastq.qz and *_2.fastq.')
@@ -152,6 +153,27 @@ def argsParser():
     paths.add_argument('-k','--kma_index', default=base + '/resources/kmaIndex/kmaIndex', help='Path to indexed KMA database.')
 
     return(parser.parse_args())
+def check_deps(checkonly, args):
+    depslist = ["kma"]
+    f = 0
+    for dep in depslist:
+        rc = subprocess.call(['which', dep], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if rc == 0:
+            if checkonly:
+                sys.stderr.write(f'{dep:<10}:{"installed":<10}\n')
+        else:
+            sys.stderr.write(f'{dep:<10}:{"missing in path, Please install ":<10}{dep}\n')
+            f += 1
+    if f > 0:
+        sys.stderr.write("KMA dependency is missing.\n")
+        sys.stderr.write("Install with 'conda install -c bioconda kma'\n")
+        sys.exit(1)
+    else:
+        if checkonly:
+            sys.stderr.write("All dependencies are present.\n")
+            sys.exit(0)
+        else:
+            return
 def mkdirOutput(args):
 
     if os.path.exists(args.output_folder + '/' + os.environ['accession']):
@@ -205,8 +227,11 @@ def run_multiprocessing(func, i, n_processors):
 def main():
 
     args = argsParser()
-    version = "1.1.0"
+    version = "1.0.3"
     start_time_ongoing = time.time()
+
+    if args.check:
+        check_deps(True, args)
 
     if not checkInputDatabases(args):
         print('Input KMA Index and Predefined Lineages do not contain same genes. Rebuild either.')
