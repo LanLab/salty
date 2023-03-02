@@ -162,11 +162,11 @@ def check_deps(checkonly, args):
             if checkonly:
                 sys.stderr.write(f'{dep:<10}:{"installed":<10}\n')
         else:
-            sys.stderr.write(f'{dep:<10}:{"missing in path, Please install ":<10}{dep}\n')
+            sys.stderr.write(f'{dep:<10}:{" Missing in path, Please install ":<10}{dep}\n')
             f += 1
     if f > 0:
-        sys.stderr.write("KMA dependency is missing.\n")
-        sys.stderr.write("Install with 'conda install -c bioconda kma'\n")
+        sys.stderr.write("One or more dependencies missing.'\n")
+        sys.stderr.write("If KMA use: 'conda install -c bioconda kma'\n")
         sys.exit(1)
     else:
         if checkonly:
