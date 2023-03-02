@@ -12,10 +12,8 @@ SALTy typing is highly accurate and can quickly analyse large volumes of <i>S. a
 ---
 
 # Installation
-```commandline
-conda install -c conda-forge -c bioconda salty`
-conda install -c bioconda kma`
-
+1. ```commandline
+conda install -c conda-forge -c bioconda salty
 ```
 
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/salty/badges/installer/conda.svg)](https://conda.anaconda.org/bioconda)
