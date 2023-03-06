@@ -15,9 +15,8 @@ SALTy typing is highly accurate and can quickly analyse large volumes of <i>S. a
 ```commandline
 conda install -c conda-forge -c bioconda salty
 ```
-*See below for Mac M1 installation.
+**See below for Mac M1 installation.
 
-[![Anaconda-Server Badge](https://anaconda.org/bioconda/salty/badges/installer/conda.svg)](https://conda.anaconda.org/bioconda)
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/salty/badges/downloads.svg)](https://anaconda.org/bioconda/salty)
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/salty/badges/version.svg)](https://anaconda.org/bioconda/salty)
 
@@ -83,3 +82,19 @@ SRR10591328	15		24		20		69
 |SACOL1908|The identified allele for the SACOL1908 locus.|
 |SACOL2725|The identified allele for the SACOL2725 locus.|
 
+# Installing SaLTy with Conda on Mac M1 Installation (Aarch64)
+As of March 2023 not all required SaLTy dependencies have been developed for both Intel and Mac M1 chipsets. 
+The conda environments created on Mac M1 can be configured to collect dependencies developed only for Intel (osx-64).
+Additionally, python v3.9.0 should be used to avoid compatability issues with Numpy (required for Pandas which is required for SaLTy).
+
+1. Create a conda environment with Python v3.9.0 and configure for Intel (osx-64).
+```commandline
+conda create -n salty python=3.9.0
+conda activate salty
+conda config --env --set subdir osx-64
+```
+
+2. Install SaLTy
+```commandline
+conda install -c bioconda salty
+```
