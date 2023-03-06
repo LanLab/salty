@@ -136,7 +136,7 @@ def argsParser():
     general.add_argument('-t','--threads', default=1, type=int, help='Number of threads (speeds up parsing raw reads).')
     general.add_argument('-f','--force', default=False, action='store_true',  help='Overwite existing output folder.')
     general.add_argument('--report', default=False, action='store_true',  help='Only generate summary report from previous SALTy outputs.')
-    general.add_argument('-v','--version', default=True, action='store_true')
+    general.add_argument('-v','--version', default=False, action='store_true')
     general.add_argument("--check", action='store_true', help="check dependencies are installed")
 
     inputs = parser.add_argument_group('INPUT')
@@ -196,14 +196,6 @@ def checkInputReads(reads_folder):
         return True
     else:
         return False
-def checkInputDatabases(args):
-    kmaInput = list(set([x.split(':')[0] for x in open(args.kma_index + '.name').read().splitlines()]))
-    lineageInput = open(args.lineages).read().splitlines()[0].split(',')[1:]
-
-    if set(kmaInput) == set(lineageInput):
-        return True
-    else:
-        return False
 def collectGenomes(args):
     paths = []
     for fasta in glob.iglob(args.input_folder + '/*fasta'):
@@ -232,10 +224,7 @@ def main():
 
     if args.check:
         check_deps(True, args)
-
-    if not checkInputDatabases(args):
-        print('Input KMA Index and Predefined Lineages do not contain same genes. Rebuild either.')
-        exit()
+        sys.exit(0)
 
     elif args.version:
         print(f"salty version: {version}")
