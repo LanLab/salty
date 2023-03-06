@@ -87,14 +87,14 @@ As of March 2023 not all required SaLTy dependencies have been developed for bot
 The conda environments created on Mac M1 can be configured to collect dependencies developed only for Intel (osx-64).
 Additionally, python v3.9.0 should be used to avoid compatability issues with Numpy (required for Pandas which is required for SaLTy).
 
-1. Create a conda environment with Python v3.9.0 and configure for Intel (osx-64).
+1. Create a conda environment and configure the environment for Intel (osx-64).
 ```commandline
 conda create -n salty
 conda activate salty
 conda config --env --set subdir osx-64
 ```
 
-2. Install SaLTy
+2. Install SaLTy with Python v3.9.0.
 ```commandline
 conda install -c bioconda salty python=3.9.0
 ```
