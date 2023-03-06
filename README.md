@@ -89,12 +89,12 @@ Additionally, python v3.9.0 should be used to avoid compatability issues with Nu
 
 1. Create a conda environment with Python v3.9.0 and configure for Intel (osx-64).
 ```commandline
-conda create -n salty python=3.9.0
+conda create -n salty
 conda activate salty
 conda config --env --set subdir osx-64
 ```
 
 2. Install SaLTy
 ```commandline
-conda install -c bioconda salty
+conda install -c bioconda salty python=3.9.0
 ```
