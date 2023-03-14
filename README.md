@@ -109,9 +109,12 @@ MLST type can be used in some instances to infer the SaLTy lineage. Referred to 
 
 Below are three cases of SaLTy analysis and the use of mlstPrediction is explained.
 
-#1 SaLTy predicted lineage only using three-gene markers (no asterisk). \n
-#2 SaLTy predicted lineage based on MLST type. Three-gene markers unable to infer lineage. Instead associated MLST type used. \n
-#3 SaLTy unable to predict lineage. Tried both three-gene markers and mlst prediction (marker by asterisk). \n
+#1 SaLTy predicted lineage only using three-gene markers (no asterisk).
+
+#2 SaLTy predicted lineage based on MLST type. Three-gene markers unable to infer lineage. Instead associated MLST type used.
+
+#3 SaLTy unable to predict lineage. Tried both three-gene markers and mlst prediction (marker by asterisk).
+
 ````
 # Genome        Lineage   SACOL0451 SACOL1908 SACOL2725
 1 SRR9920718    15        20        24        24
