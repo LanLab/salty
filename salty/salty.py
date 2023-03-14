@@ -250,7 +250,7 @@ def run_multiprocessing(func, i, n_processors):
 def main():
 
     args = argsParser()
-    version = "1.0.4"
+    version = "1.0.5"
     start_time_ongoing = time.time()
 
     if args.check:
