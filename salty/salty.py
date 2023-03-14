@@ -180,7 +180,7 @@ def argsParser():
     base = os.path.join(os.path.dirname(os.path.realpath(__file__)))
     paths.add_argument('-l','--lineages', default=base + '/resources/alleles/alleles.csv', help='Path to specific alleles for each lineage.')
     paths.add_argument('-k','--kma_index', default=base + '/resources/kmaIndex/kmaIndex', help='Path to indexed KMA database.')
-    paths.add_argument('-m','--mlstPrediction', action='store_true', default=True, help='Explained in ReadMe. Used as backup when lineage is unable to be called through SaLTy screening.')
+    paths.add_argument('-m','--mlstPrediction', action='store_true', default=True, help='Explained in ReadMe. Used as backup when lineage is unable to be called through SaLTy screening. Marked with *.')
 
     return(parser.parse_args())
 def check_deps(checkonly, args):
