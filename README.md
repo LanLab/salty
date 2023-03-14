@@ -105,7 +105,12 @@ conda install -c bioconda salty python=3.9.0
 It is possible to infer a SaLTy lineage through the Multi-Locus Sequencing Type (MLST). During the development of SaLTy a select number of MLST types were associated with SaLTy lineages. This list of MLST types is not exhaustive and will not be continually updated.
 
 
-Then the three-gene SaLTy algorithim cannot assign a lineage a MLST type can be used. Referred to as mlstPrediction (in the SaLTy usage), when SaLTy has attempted to use MLST to predict a lineage an asterisk (*) is marked.
+MLST type can be used in some instances to infer the SaLTy lineage. Referred to as mlstPrediction (in the SaLTy usage), when SaLTy has attempted to use MLST to predict a lineage an asterisk (*) is marked.
 
 Below are three cases of SaLTy analysis and the use of mlstPrediction is explained.
-
+````
+#  Genome		Lineage		SACOL0451	SACOL1908	SACOL2725
+1 SRR9920718	15	20	24	24!
+2 ERR109478	*4	13	-	16
+3 ERR1213758	*No lineages association.	-	-	-
+````
