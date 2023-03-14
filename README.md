@@ -8,6 +8,7 @@ SALTy typing is highly accurate and can quickly analyse large volumes of <i>S. a
 1. python (v3.6 or greater)
 2. kma (v1.4.9 or greater)
 3. pandas  (v1.5.0 or greater)
+4. mlst (2.23.0 or greater)
 
 ---
 
@@ -46,11 +47,13 @@ OUTPUT:
   -c, --csv_format    Output file in csv format.
   -s, --summary         Concatenate all output assignments into single file.
 
-DB PATHS:
+DB & Program Paths:
   -l LINEAGES, --lineages LINEAGES
                         Path to specific alleles for each lineage.
   -k KMA_INDEX, --kma_index KMA_INDEX
                         Path to indexed KMA database.
+  -m, --mlstPrediction  Explained in ReadMe. Used as backup when lineage is unable to be called
+                        through SaLTy screening. Marked with *.
 ```
 
 
@@ -98,3 +101,25 @@ conda config --env --set subdir osx-64
 ```commandline
 conda install -c bioconda salty python=3.9.0
 ```
+
+# SaLTy Prediction with Multi-Locus Sequence Types (Marked with an *)
+It is possible to infer a SaLTy lineage through the Multi-Locus Sequencing Type (MLST). During the development of SaLTy a select number of MLST types were associated with SaLTy lineages. This list of MLST types is not exhaustive and will not be continually updated.
+
+
+MLST type can be used in some instances to infer the SaLTy lineage. Referred to as mlstPrediction (in the SaLTy usage), when SaLTy has attempted to use MLST to predict a lineage an asterisk (*) is marked.
+
+
+Below are three cases of SaLTy analysis and the use of mlstPrediction is explained.
+
+#1 SaLTy predicted lineage only using three-gene markers (no asterisk).
+
+#2 SaLTy predicted lineage based on MLST type. Three-gene markers unable to infer lineage. Instead associated MLST type used.
+
+#3 SaLTy unable to predict lineage. Tried both three-gene markers and mlst prediction (marker by asterisk).
+
+````
+# Genome        Lineage   SACOL0451 SACOL1908 SACOL2725
+1 SRR9920718    15        20        24        24
+2 ERR109478     *4        13	    -	      16
+3 ERR1213758    *No lin.  -         -         -
+````
