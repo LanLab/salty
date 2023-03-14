@@ -109,8 +109,13 @@ MLST type can be used in some instances to infer the SaLTy lineage. Referred to 
 
 Below are three cases of SaLTy analysis and the use of mlstPrediction is explained.
 ````
-# Genome		  Lineage		SACOL0451	SACOL1908	SACOL2725
-1 SRR9920718	15	      20	      24	      24
-2 ERR109478	  *4	      13	      -	        16
-3 ERR1213758	*No lin.  -	        -	        -
+# Genome.   Lineage   SACOL0451 SACOL1908	SACOL2725
+1 SRR9920718    15	      20	      24	      24
+2 ERR109478    *4	      13	      -	        16
+3 ERR1213758    *No lin.  -	        -	        -
 ````
+
+Genome.   Lineage   SACOL0451 SACOL1908	SACOL2725
+SRR992071338	15		24		20    24
+SRR992044718	15		24		20		24
+SRR10591328	15		24		20		69
