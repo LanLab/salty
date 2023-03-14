@@ -8,7 +8,7 @@ SALTy typing is highly accurate and can quickly analyse large volumes of <i>S. a
 1. python (v3.6 or greater)
 2. kma (v1.4.9 or greater)
 3. pandas  (v1.5.0 or greater)
-4. mlst (2.23.0 or greater)
+4. mlst (v2.23.0 or greater)
 
 ---
 
