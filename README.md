@@ -46,11 +46,13 @@ OUTPUT:
   -c, --csv_format    Output file in csv format.
   -s, --summary         Concatenate all output assignments into single file.
 
-DB PATHS:
+DB & Program Paths:
   -l LINEAGES, --lineages LINEAGES
                         Path to specific alleles for each lineage.
   -k KMA_INDEX, --kma_index KMA_INDEX
                         Path to indexed KMA database.
+  -m, --mlstPrediction  Explained in ReadMe. Used as backup when lineage is unable to be called
+                        through SaLTy screening. Marked with *.
 ```
 
 
@@ -98,3 +100,12 @@ conda config --env --set subdir osx-64
 ```commandline
 conda install -c bioconda salty python=3.9.0
 ```
+
+# SaLTy Prediction with Multi-Locus Sequence Types (Marked with an *)
+It is possible to infer a SaLTy lineage through the Multi-Locus Sequencing Type (MLST). During the development of SaLTy a select number of MLST types were associated with SaLTy lineages. This list of MLST types is not exhaustive and will not be continually updated.
+
+
+Then the three-gene SaLTy algorithim cannot assign a lineage a MLST type can be used. Referred to as mlstPrediction (in the SaLTy usage), when SaLTy has attempted to use MLST to predict a lineage an asterisk (*) is marked.
+
+Below are three cases of SaLTy analysis and the use of mlstPrediction is explained.
+
