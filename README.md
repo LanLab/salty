@@ -107,6 +107,7 @@ It is possible to infer a SaLTy lineage through the Multi-Locus Sequencing Type 
 
 MLST type can be used in some instances to infer the SaLTy lineage. Referred to as mlstPrediction (in the SaLTy usage), when SaLTy has attempted to use MLST to predict a lineage an asterisk (*) is marked.
 
+
 Below are three cases of SaLTy analysis and the use of mlstPrediction is explained.
 
 #1 SaLTy predicted lineage only using three-gene markers (no asterisk).
