@@ -18,7 +18,6 @@ def caller(path, args, start_time_ongoing):
     parseInput(path, args) #alter DB path option
     alleles = filtCalledAlleles(alleles, args)
     alleles = getLineageFromAllele(alleles, args)
-    alleles = checkFailedLineage(alleles, path, args)
     generateReport(alleles, args)
     timer(os.environ['accession'], start_time_ongoing, start_time_analysis)
 def parseInput(path, args):
@@ -69,28 +68,6 @@ def getLineageFromAllele(alleles, args):
         filtLineageAllelesDF.to_csv(args.output_folder + "/" + os.environ['accession'] + "/" + os.environ['accession'] + '_multipleLineageAlleles.csv', index=False)
         return alleles
 
-def checkFailedLineage(alleles, path, args):
-    if args.mlstPrediction:
-        if alleles['Lineage'] == 'No lineages association.':
-            base = os.path.join(os.path.dirname(os.path.realpath(__file__)))
-            MLSTin = base + '/resources/MLSTtoSaLTy.csv'
-            MLSTtoSaLTyDf = pd.read_csv(MLSTin)
-            MLSTtype = getMLSTtype(path, args)
-            if MLSTtype.isdigit():
-                MLSTtype = int(MLSTtype)
-                associatedSaLTy = MLSTtoSaLTyDf[MLSTtoSaLTyDf['7-Gene-MLST'] == MLSTtype]['SaLTy-Lineage'].values[0]
-                alleles['Lineage'] = f'*{associatedSaLTy}'
-                return alleles
-            else:
-                os.environ['accession'] = getAccession(path[1])
-                print(f""""{os.environ['accession']} is untypable with MLST. Therefore, lineage can not be predicted with SaLTy or MLST.""")
-                alleles['Lineage'] = '*No lineages association.'
-                return alleles
-        else:
-            return alleles
-    else:
-        return alleles
-
 def getMLSTtype(path, args):
     os.environ['accession'] = getAccession(path[1])
     MLSTOutput = subprocess.check_output(['mlst', '--quiet','--scheme', 'saureus', '--threads', str(args.threads), path[1]])
@@ -110,7 +87,15 @@ def filtLineageAlleles(alleles, lineageAllelesDF):
 
 #aux functions
 def getAccession(path):
-    return path.split('/')[-1].split('.')[0].split('_')[0]
+    acc = path.split('/')[-1].split('.')[0]
+
+    if 'GCA_' in acc or 'GCF_' in acc:
+        acc = "GCA" + str(acc.split("_")[1])
+        return acc
+    else:
+        acc = acc.split("_")[0]
+        return acc
+
 def generateReport(alleles, args):
     print(os.environ['accession'] + ': writing output.')
     print(alleles)
@@ -180,7 +165,6 @@ def argsParser():
     base = os.path.join(os.path.dirname(os.path.realpath(__file__)))
     paths.add_argument('-l','--lineages', default=base + '/resources/alleles/alleles.csv', help='Path to specific alleles for each lineage.')
     paths.add_argument('-k','--kma_index', default=base + '/resources/kmaIndex/kmaIndex', help='Path to indexed KMA database.')
-    paths.add_argument('-m','--mlstPrediction', action='store_true', default=True, help='Explained in ReadMe. Used as backup when lineage is unable to be called through SaLTy screening. Marked with *.')
 
     return(parser.parse_args())
 def check_deps(checkonly, args):
